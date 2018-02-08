@@ -19,7 +19,7 @@ To lazy load part of your environment, add a function to your `~/.bashrc` or
 load. Then, pass that function to `lazy_load`, along with one or more commands
 to use as triggers for running the initialization:
 
-```python
+```bash
 source "path/to/lazy_loader.sh"
 
 rbenv_init() {
@@ -29,10 +29,29 @@ rbenv_init() {
 lazy_load rbenv_init rbenv bundle bundler gem irb rake ruby
 ```
 
+Lazy Loader works by creating a hook function for each trigger command:
+
+```console
+$ type ruby
+ruby is a shell function from /Users/cyphus/.oh-my-zsh/custom/lazy-rbenv.zsh
+```
+
 When you invoke one of the trigger commands, the initialization function you
-defined is ran, and the original command is called. Any stub functions created
-by the lazy loader are removed so the initialization steps don't get reran the
-next time you invoke the command.
+defined is ran, and the original command is called:
+
+```console
+$ ruby -v
+Lazy loading ruby...
+ruby 2.4.1p111 (2017-03-22 revision 58053) [x86_64-darwin16]
+```
+
+Any hook functions created by the lazy loader are removed so future invocations
+will run the command directly:
+
+```console
+$ type ruby
+ruby is /Users/cyphus/.rbenv/shims/ruby
+```
 
 ## Motivation
 
